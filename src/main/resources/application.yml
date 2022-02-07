@@ -1,0 +1,56 @@
+server:
+  port: 8761
+
+spring:
+  application:
+    name: kgt-gateway
+  cloud:
+    gateway:
+      x-forwarded:
+        enabled: true
+        for-enabled: true
+        proto-enabled: true
+        host-append: false
+        port-append: false
+        proto-append: false
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+      routes:
+        - id: registry
+          uri: http://localhost:8762/
+          predicates:
+            - Path=/registry/**
+          filters:
+            - StripPrefix=1
+        - id: eureka
+          uri: http://localhost:8762/eureka
+          predicates:
+            - Path=/eureka/**
+#        - id: hrmis-interop
+#          uri: lb:http://hrmis-interop:8040/
+#          predicates:
+#            - Path=/hrmis-interop/**
+#          filters:
+#            - StripPrefix=1
+#        - id: hrmis-chat
+#          uri: lb:http://hrmis-chat:8050/
+#          predicates:
+#            - Path=/hrmis-chat/**
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: kgt-gateway
+
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    registerWithEureka: true
+    serviceUrl:
+      defaultZone: http://localhost:8762/eureka/
