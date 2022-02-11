@@ -9,7 +9,6 @@ import org.springframework.web.cors.reactive.CorsWebFilter
 import org.springframework.web.cors.reactive.UrlBasedCorsConfigurationSource
 import org.springframework.web.reactive.config.CorsRegistry
 import org.springframework.web.reactive.config.WebFluxConfigurer
-import java.util.*
 
 @Configuration
 class CORSConfiguration : WebFluxConfigurer {
