@@ -5,11 +5,15 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.runApplication
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient
+import org.springframework.cloud.openfeign.EnableFeignClients
+import reactivefeign.spring.config.EnableReactiveFeignClients
 
 
+@EnableFeignClients
 @EnableDiscoveryClient
-@SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
+@EnableReactiveFeignClients
 @EnableConfigurationProperties
+@SpringBootApplication(exclude = [SecurityAutoConfiguration::class])
 class KgtGatewayApplication
 
 fun main(args: Array<String>) {

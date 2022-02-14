@@ -8,17 +8,11 @@ spring:
   application:
     name: kgt-gateway
   cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
     gateway:
-      x-forwarded:
-        enabled: true
-        for-enabled: true
-        proto-enabled: true
-        host-append: false
-        port-append: false
-        proto-append: false
-      httpclient:
-        ssl:
-          use-insecure-trust-manager: true
       routes:
         # Access registry server
         - id: registry
@@ -44,10 +38,6 @@ spring:
             - StripPrefix=1
 
 
-jwt:
-  signing-key: bRJrESo3vfMfbuXr6IBA9QbT8gQs4PiY
-
-
 management:
   endpoint:
     gateway:
@@ -57,10 +47,30 @@ management:
       exposure:
         include: kgt-gateway
 
+
+
 eureka:
   instance:
-    hostname: localhost
+    prefer-ip-address: true
+    hostname: 127.0.0.1
   client:
-    registerWithEureka: true
-    serviceUrl:
-      defaultZone: http://localhost:8762/eureka/
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://127.0.0.1:8762/eureka/
+
+ribbon:
+  eureka:
+    enabled: false
+
+feign:
+  compression:
+    request:
+      enabled: true
+    response:
+      enabled: true
+  client:
+    config:
+      default:
+        connectTimeout: 60000
+        readTimeout: 40000

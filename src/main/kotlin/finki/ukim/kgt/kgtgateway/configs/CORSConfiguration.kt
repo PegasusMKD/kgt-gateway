@@ -1,4 +1,4 @@
-package finki.ukim.kgt.kgtgateway
+package finki.ukim.kgt.kgtgateway.configs
 
 import com.google.common.collect.Lists
 import org.springframework.context.annotation.Bean
