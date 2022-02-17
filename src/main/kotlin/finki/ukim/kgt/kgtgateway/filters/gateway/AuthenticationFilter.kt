@@ -6,10 +6,10 @@ import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import org.springframework.cloud.gateway.filter.GatewayFilter
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory
+import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Component
 import org.springframework.web.server.ServerWebExchange
 import reactor.core.publisher.Mono
-import org.springframework.context.annotation.Lazy
 
 @Component
 class AuthenticationFilter(@Lazy private val authorizationServiceProxy: AuthorizationServiceProxy) :
@@ -31,10 +31,13 @@ class AuthenticationFilter(@Lazy private val authorizationServiceProxy: Authoriz
 
             try {
                 authorizationServiceProxy.getUser(headerValue[0]).flatMap {
-                    if(it == null)
+                    if (it == null)
                         return@flatMap onError(config, exchange)
 
-                    exchange.request.mutate().header("Roles", it.roles.joinToString(",")).build()
+                    exchange.request.mutate()
+                        .header("Roles", it.roles.joinToString(","))
+                        .header("User-ID", it.id)
+                        .build()
                     chain.filter(exchange)
                 }
             } catch (e: Exception) {
