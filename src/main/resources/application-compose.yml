@@ -1,0 +1,56 @@
+server:
+  port: 8761
+
+spring:
+  profiles: compose
+  cloud:
+    loadbalancer:
+      ribbon:
+        enabled: false
+
+    gateway:
+      routes:
+        # Access registry server
+        - id: registry
+          uri: http://kgt-registry:8762/
+          predicates:
+            - Path=/registry/**
+          filters:
+            - StripPrefix=1
+            - AuthenticationFilter
+
+        # Connect to Eureka
+        - id: eureka
+          uri: http://kgt-registry:8762/eureka
+          predicates:
+            - Path=/eureka/**
+
+        # Access authorization server
+        - id: authorization
+          uri: http://kgt-authorization:8081/
+          predicates:
+            - Path=/authorization/**
+          filters:
+            - StripPrefix=1
+
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: kgt-gateway
+
+
+
+eureka:
+  instance:
+    prefer-ip-address: true
+    hostname: kgt-gateway
+  client:
+    fetch-registry: true
+    register-with-eureka: true
+    service-url:
+      defaultZone: http://kgt-registry:8762/eureka/

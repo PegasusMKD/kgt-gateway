@@ -7,7 +7,7 @@ COPY pom.xml .
 COPY src src
 
 # package the project using a cache for the maven dependencies
-RUN --mount=type=cache,target=/root/.m2 mvn clean package  -Dmaven.test.skip
+RUN --mount=type=cache,target=/root/.m2 mvn clean package -Dmaven.test.skip
 
 # Unpack the fat jar so that we may have it layered
 RUN mkdir -p target/dependency && (cd target/dependency; jar -xf ../*.jar)
@@ -25,4 +25,4 @@ COPY --from=build ${DEPENDENCY}/META-INF /app/META-INF
 COPY --from=build ${DEPENDENCY}/BOOT-INF/classes /app
 
 # Start the application from the main class
-ENTRYPOINT ["java","-cp","app:app/lib/*","finki.ukim.kgt.kgtfeedback.KgtFeedbackApplication"]
+ENTRYPOINT ["java","-Dspring.profiles.active=compose","-cp","app:app/lib/*","finki.ukim.kgt.kgtgateway.KgtGatewayApplicationKt"]
