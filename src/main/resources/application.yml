@@ -24,6 +24,15 @@ spring:
               - PUT
               - DELETE
       routes:
+
+        # Access registry server
+        - id: registry-ui
+          uri: http://localhost:8762/ui
+          predicates:
+            - Path=/registry/ui
+          filters:
+            - StripPrefix=1
+
         # Access registry server
         - id: registry
           uri: http://localhost:8762/
@@ -32,6 +41,7 @@ spring:
           filters:
             - StripPrefix=1
             - AuthenticationFilter
+
 
         # Connect to Eureka
         - id: eureka
