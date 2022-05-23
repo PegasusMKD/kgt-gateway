@@ -2,7 +2,6 @@ server:
   port: 8761
 
 spring:
-  profiles: compose
   cloud:
     loadbalancer:
       ribbon:
@@ -10,6 +9,15 @@ spring:
 
     gateway:
       routes:
+        # Access registry server
+        - id: registry-ui
+          uri: http://kgt-registry:8762/ui
+          predicates:
+            - Path=/registry/ui
+          filters:
+            - StripPrefix=1
+
+
         # Access registry server
         - id: registry
           uri: http://kgt-registry:8762/
@@ -32,6 +40,9 @@ spring:
             - Path=/authorization/**
           filters:
             - StripPrefix=1
+  config:
+    activate:
+      on-profile: compose
 
 
 management:
