@@ -58,6 +58,15 @@ spring:
             - StripPrefix=1
 
 
+        # Access triplet service
+        - id: tripletService
+          uri: http://localhost:8101/
+          predicates:
+            - Path=/triplets/**
+          filters:
+            - StripPrefix=1
+
+
 management:
   endpoint:
     gateway:

@@ -40,6 +40,15 @@ spring:
             - Path=/authorization/**
           filters:
             - StripPrefix=1
+
+
+        # Access triplet service
+        - id: tripletService
+          uri: http://kgt-ontology:8101/
+          predicates:
+            - Path=/ontology-service/**
+          filters:
+            - StripPrefix=1
   config:
     activate:
       on-profile: compose
